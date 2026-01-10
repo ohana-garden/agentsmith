@@ -18,23 +18,23 @@ WORKDIR /a0
 # Upgrade pip
 RUN pip install --no-cache-dir --upgrade pip
 
-# Stage 1: Core ML stack - let pip resolve compatible versions
-RUN pip install --no-cache-dir \
-    numpy \
-    scipy \
-    scikit-learn
-
-# Stage 2: PyTorch CPU-only (latest compatible)
+# Stage 1: PyTorch CPU-only FIRST - this dictates numpy version
 RUN pip install --no-cache-dir \
     torch --index-url https://download.pytorch.org/whl/cpu
 
-# Stage 3: ML/NLP - modern compatible versions
+# Stage 2: ML/NLP - these will use torch's numpy
 RUN pip install --no-cache-dir \
     transformers \
     accelerate \
     sentence-transformers \
     tokenizers \
     tiktoken
+
+# Stage 3: Scientific stack AFTER torch - will get compatible versions
+RUN pip install --no-cache-dir \
+    scipy \
+    scikit-learn \
+    faiss-cpu
 
 # Stage 4: LLM providers
 RUN pip install --no-cache-dir \
@@ -64,8 +64,7 @@ RUN pip install --no-cache-dir \
 # Stage 7: Database and graph
 RUN pip install --no-cache-dir \
     redis \
-    falkordb \
-    faiss-cpu
+    falkordb
 
 # Stage 8: Langchain ecosystem
 RUN pip install --no-cache-dir \
