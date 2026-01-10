@@ -83,6 +83,11 @@ RUN pip install --no-cache-dir \
     pathspec==0.12.1 \
     GitPython==3.1.41
 
+# Stage 10: MCP and A2A support
+RUN pip install --no-cache-dir \
+    fastmcp \
+    starlette
+
 # Copy application code
 COPY . /a0/
 
