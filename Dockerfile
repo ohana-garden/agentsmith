@@ -90,9 +90,9 @@ RUN pip install --no-cache-dir \
     pathspec \
     GitPython
 
-# Stage 11: MCP and A2A support
+# Stage 11: MCP and A2A support (pinned versions for API compatibility)
 RUN pip install --no-cache-dir \
-    fastmcp \
+    fastmcp==2.3.4 \
     starlette \
     a2wsgi \
     anyio \
