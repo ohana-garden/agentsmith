@@ -8,12 +8,18 @@ import faiss
 
 
 from langchain_core.documents import Document
-from langchain.storage import InMemoryByteStore
 from langchain_community.docstore.in_memory import InMemoryDocstore
 from langchain_community.vectorstores.utils import (
     DistanceStrategy,
 )
-from langchain.embeddings import CacheBackedEmbeddings
+try:
+    from langchain.storage import InMemoryByteStore
+    from langchain.embeddings import CacheBackedEmbeddings
+    LANGCHAIN_CACHE_AVAILABLE = True
+except ImportError:
+    InMemoryByteStore = None
+    CacheBackedEmbeddings = None
+    LANGCHAIN_CACHE_AVAILABLE = False
 from simpleeval import simple_eval
 
 from agent import Agent
@@ -34,13 +40,13 @@ class MyFaiss(FAISS):
 
 class VectorDB:
 
-    _cached_embeddings: dict[str, CacheBackedEmbeddings] = {}
+    _cached_embeddings: dict = {}  # CacheBackedEmbeddings when available
 
     @staticmethod
     def _get_embeddings(agent: Agent, cache: bool = True):
         model = agent.get_embedding_model()
-        if not cache:
-            return model  # return raw embeddings if cache is False
+        if not cache or not LANGCHAIN_CACHE_AVAILABLE:
+            return model  # return raw embeddings if cache is False or unavailable
         namespace = getattr(
             model,
             "model_name",
@@ -148,3 +154,4 @@ def get_comparator(condition: str):
             return False
 
     return comparator
+
