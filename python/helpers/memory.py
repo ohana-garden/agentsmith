@@ -1,7 +1,14 @@
 from datetime import datetime
 from typing import Any, List, Sequence
-from langchain.storage import InMemoryByteStore, LocalFileStore
-from langchain.embeddings import CacheBackedEmbeddings
+try:
+    from langchain.storage import InMemoryByteStore, LocalFileStore
+    from langchain.embeddings import CacheBackedEmbeddings
+    LANGCHAIN_CACHE_AVAILABLE = True
+except ImportError:
+    InMemoryByteStore = None
+    LocalFileStore = None
+    CacheBackedEmbeddings = None
+    LANGCHAIN_CACHE_AVAILABLE = False
 from python.helpers import guids
 
 # from langchain_chroma import Chroma
@@ -146,25 +153,30 @@ class Memory:
         # make sure embeddings and database directories exist
         os.makedirs(db_dir, exist_ok=True)
 
-        if in_memory:
-            store = InMemoryByteStore()
-        else:
-            os.makedirs(em_dir, exist_ok=True)
-            store = LocalFileStore(em_dir)
-
         embeddings_model = models.get_embedding_model(
             model_config.provider,
             model_config.name,
             **model_config.build_kwargs(),
         )
-        embeddings_model_id = files.safe_file_name(
-            model_config.provider + "_" + model_config.name
-        )
-
-        # here we setup the embeddings model with the chosen cache storage
-        embedder = CacheBackedEmbeddings.from_bytes_store(
-            embeddings_model, store, namespace=embeddings_model_id
-        )
+        
+        # Setup embeddings with caching if available
+        if LANGCHAIN_CACHE_AVAILABLE:
+            if in_memory:
+                store = InMemoryByteStore()
+            else:
+                os.makedirs(em_dir, exist_ok=True)
+                store = LocalFileStore(em_dir)
+            
+            embeddings_model_id = files.safe_file_name(
+                model_config.provider + "_" + model_config.name
+            )
+            # here we setup the embeddings model with the chosen cache storage
+            embedder = CacheBackedEmbeddings.from_bytes_store(
+                embeddings_model, store, namespace=embeddings_model_id
+            )
+        else:
+            # No caching available, use embeddings model directly
+            embedder = embeddings_model
 
         # initial DB and docs variables
         db: MyFaiss | None = None
@@ -573,3 +585,4 @@ def get_knowledge_subdirs_by_memory_subdir(
 
         default.append(get_project_meta_folder(memory_subdir[9:], "knowledge"))
     return default
+
