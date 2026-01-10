@@ -42,8 +42,13 @@ from langchain_core.messages import (
     HumanMessage,
     SystemMessage,
 )
-from langchain.embeddings.base import Embeddings
-from sentence_transformers import SentenceTransformer
+from langchain_core.embeddings import Embeddings
+try:
+    from sentence_transformers import SentenceTransformer
+    SENTENCE_TRANSFORMERS_AVAILABLE = True
+except ImportError:
+    SentenceTransformer = None
+    SENTENCE_TRANSFORMERS_AVAILABLE = False
 from pydantic import ConfigDict
 
 
@@ -723,6 +728,8 @@ class LocalSentenceTransformerWrapper(Embeddings):
         }
         st_kwargs = {k: v for k, v in (kwargs or {}).items() if k in st_allowed_keys}
 
+        if not SENTENCE_TRANSFORMERS_AVAILABLE:
+            raise ImportError("sentence-transformers package not available. Install with: pip install sentence-transformers")
         self.model = SentenceTransformer(model, **st_kwargs)
         self.model_name = model
         self.a0_model_conf = model_config
@@ -774,7 +781,7 @@ def _get_litellm_embedding(
     **kwargs: Any,
 ):
     # Check if this is a local sentence-transformers model
-    if provider_name == "huggingface" and model_name.startswith(
+    if SENTENCE_TRANSFORMERS_AVAILABLE and provider_name == "huggingface" and model_name.startswith(
         "sentence-transformers/"
     ):
         # Use local sentence-transformers instead of LiteLLM for local models
@@ -920,3 +927,4 @@ def get_embedding_model(
     orig = provider.lower()
     provider_name, kwargs = _merge_provider_defaults("embedding", orig, kwargs)
     return _get_litellm_embedding(name, provider_name, model_config, **kwargs)
+
