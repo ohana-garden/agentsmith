@@ -30,6 +30,7 @@ tomli==2.0.1
 # LangChain
 langchain-core==0.1.27
 langchain-community==0.0.24
+langchain==0.1.6
 
 # Web Framework
 flask[async]==3.0.3
