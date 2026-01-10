@@ -86,13 +86,20 @@ def get_persona(role: str) -> Optional[Dict]:
 
 def call_model(model: str, system_prompt: str, user_message: str,
                temperature: float = 0.7) -> str:
-    """Call a model via OpenRouter"""
+    """Call a model via OpenRouter using LiteLLM"""
     if not LITELLM_AVAILABLE:
         log.error("LiteLLM not available")
         return f"[LiteLLM not available - would call {model}]"
     
     log.debug(f"Calling {model}")
+    
+    # Set OpenRouter API key for LiteLLM
+    api_key = os.getenv("API_KEY_OPENROUTER")
+    if not api_key:
+        return "[Error: API_KEY_OPENROUTER not set]"
+    
     try:
+        # LiteLLM handles openrouter/ prefix automatically
         response = litellm.completion(
             model=model,
             messages=[
@@ -100,8 +107,7 @@ def call_model(model: str, system_prompt: str, user_message: str,
                 {"role": "user", "content": user_message}
             ],
             temperature=temperature,
-            api_base="https://openrouter.ai/api/v1",
-            api_key=os.getenv("API_KEY_OPENROUTER")
+            api_key=api_key
         )
         log.debug(f"Got response from {model}")
         return response.choices[0].message.content
