@@ -588,7 +588,15 @@ class AsyncAIChatReplacement:
         self.chat = AsyncAIChatReplacement._Chat(wrapper)
 
 
-from browser_use.llm import ChatOllama, ChatOpenRouter, ChatGoogle, ChatAnthropic, ChatGroq, ChatOpenAI
+try:
+    from browser_use.llm import ChatOllama, ChatOpenRouter, ChatGoogle, ChatAnthropic, ChatGroq, ChatOpenAI
+    BROWSER_USE_LLM_AVAILABLE = True
+except ImportError:
+    # Create dummy base class when browser_use not available
+    class ChatOpenRouter:
+        pass
+    ChatOllama = ChatGoogle = ChatAnthropic = ChatGroq = ChatOpenAI = None
+    BROWSER_USE_LLM_AVAILABLE = False
 
 class BrowserCompatibleChatWrapper(ChatOpenRouter):
     """
@@ -927,4 +935,5 @@ def get_embedding_model(
     orig = provider.lower()
     provider_name, kwargs = _merge_provider_defaults("embedding", orig, kwargs)
     return _get_litellm_embedding(name, provider_name, model_config, **kwargs)
+
 
