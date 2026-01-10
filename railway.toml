@@ -8,8 +8,8 @@ healthcheckTimeout = 30
 restartPolicyType = "on_failure"
 
 [variables]
-FALKORDB_HOST = "falkordb.railway.internal"
-FALKORDB_PORT = "6379"
+FALKORDB_HOST = "shinkansen.proxy.rlwy.net"
+FALKORDB_PORT = "33564"
 FALKORDB_PASSWORD = "848i4g64jptrctjs"
 GRAPH_NAME = "agentsmith"
 DEBUG = "true"
