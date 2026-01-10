@@ -434,7 +434,7 @@ BMAD_PERSONAS = {
         "name": "Mary",
         "role": "Business Analyst",
         "phase": "strategic",
-        "model": "anthropic/claude-sonnet-4-20250514",  # Autonomous, capable, affordable
+        "model": "openrouter/anthropic/claude-sonnet-4",  # Autonomous, capable, affordable
         "system_prompt": """You are Mary, the Business Analyst. Your role:
 - Gather and clarify requirements
 - Identify constraints and edge cases
@@ -447,7 +447,7 @@ Always think about what could go wrong and what's missing.""",
         "name": "John", 
         "role": "Product Manager",
         "phase": "strategic",
-        "model": "anthropic/claude-sonnet-4-20250514",
+        "model": "openrouter/anthropic/claude-sonnet-4",
         "system_prompt": """You are John, the Product Manager. Your role:
 - Create PRDs from requirements
 - Define product strategy and roadmap
@@ -460,7 +460,7 @@ Focus on user value and business outcomes.""",
         "name": "Winston",
         "role": "Architect", 
         "phase": "strategic",
-        "model": "anthropic/claude-sonnet-4-20250514",
+        "model": "openrouter/anthropic/claude-sonnet-4",
         "system_prompt": """You are Winston, the Architect. Your role:
 - Design system architecture
 - Select technologies and patterns
@@ -473,7 +473,7 @@ Think in systems. Consider failure modes. Design for change.""",
         "name": "Alex",
         "role": "Developer",
         "phase": "tactical",
-        "model": "google/gemini-2.5-flash-preview",  # Fast, cheap
+        "model": "openrouter/google/gemini-2.0-flash-001",  # Fast, cheap
         "system_prompt": """You are Alex, the Developer. Your role:
 - Implement features from specs
 - Write clean, tested code
@@ -486,7 +486,7 @@ Write code that works, then make it better.""",
         "name": "Sam",
         "role": "Code Reviewer",
         "phase": "tactical",
-        "model": "deepseek/deepseek-chat",  # Cheap, thorough
+        "model": "openrouter/deepseek/deepseek-chat",  # Cheap, thorough
         "system_prompt": """You are Sam, the Code Reviewer. Your role:
 - Review code for quality and correctness
 - Check alignment with architecture
@@ -499,7 +499,7 @@ Be constructive. Catch what others miss.""",
         "name": "Quinn",
         "role": "QA Engineer",
         "phase": "tactical", 
-        "model": "meta-llama/llama-3.3-70b-instruct",  # Free on OpenRouter
+        "model": "openrouter/meta-llama/llama-3.3-70b-instruct",  # Free on OpenRouter
         "system_prompt": """You are Quinn, the QA Engineer. Your role:
 - Test for edge cases and failure modes
 - Security review
@@ -512,7 +512,7 @@ Break things before users do.""",
         "name": "Sarah",
         "role": "Product Owner",
         "phase": "strategic",
-        "model": "anthropic/claude-sonnet-4-20250514",
+        "model": "openrouter/anthropic/claude-sonnet-4",
         "system_prompt": """You are Sarah, the Product Owner. Your role:
 - Manage and prioritize backlog
 - Refine user stories
