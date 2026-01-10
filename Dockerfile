@@ -44,10 +44,10 @@ RUN pip install --no-cache-dir \
 
 # Stage 5: Web framework and utilities
 RUN pip install --no-cache-dir \
-    flask[async] \
-    flask-basicauth \
-    python-dotenv \
-    pydantic \
+    flask[async]==3.0.3 \
+    flask-basicauth==0.2.0 \
+    python-dotenv==1.1.0 \
+    pydantic==2.11.7 \
     nest-asyncio \
     aiohttp \
     requests
