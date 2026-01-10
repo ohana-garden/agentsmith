@@ -17,7 +17,10 @@ from typing import (
 from litellm import completion, acompletion, embedding
 import litellm
 import openai
-from litellm.types.utils import ModelResponse
+try:
+    from litellm.types.utils import ModelResponse
+except ImportError:
+    from litellm import ModelResponse
 
 from python.helpers import dotenv
 from python.helpers import settings, dirty_json
