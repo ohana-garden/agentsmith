@@ -1,4 +1,5 @@
-# Railway cache bust 20260110071918
+# Railway cache bust 20260110073624
+fastmcp
 # AgentSmith Requirements
 # Pinned versions for compatibility
 
