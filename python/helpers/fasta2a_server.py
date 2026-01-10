@@ -155,8 +155,7 @@ class AgentZeroWorker(Worker):  # type: ignore[misc]
         """Convert A2A message to Agent Zero UserMessage."""
         # Extract text from message parts
         text_parts = [part.get('text', '') for part in a2a_message.get('parts', []) if part.get('kind') == 'text']
-        message_text = '
-'.join(text_parts)
+        message_text = '\n'.join(text_parts)
 
         # Extract file attachments
         attachments = []
