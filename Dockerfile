@@ -67,8 +67,11 @@ RUN pip install --no-cache-dir \
 
 # Stage 8: Agent Zero specific
 RUN pip install --no-cache-dir \
+    langchain==0.1.6 \
     langchain-core==0.1.27 \
     langchain-community==0.0.24 \
+    langchain-text-splitters==0.0.1 \
+    langchain-unstructured==0.1.0 \
     docker==7.0.0 \
     paramiko==3.4.0 \
     duckduckgo-search==4.4.3 \
