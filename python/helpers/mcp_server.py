@@ -309,27 +309,21 @@ else:
             http_path = f"/t-{self.token}/http"
             message_path = f"/t-{self.token}/messages/"
 
-            mcp_server.settings.message_path = message_path
-            mcp_server.settings.sse_path = sse_path
-
             with self._lock:
                 self.sse_app = create_sse_app(
                     server=mcp_server,
-                    message_path=mcp_server.settings.message_path,
-                    sse_path=mcp_server.settings.sse_path,
-                    auth_server_provider=mcp_server._auth_server_provider,
-                    auth_settings=mcp_server.settings.auth,
-                    debug=mcp_server.settings.debug,
-                    routes=mcp_server._additional_http_routes,
+                    message_path=message_path,
+                    sse_path=sse_path,
                     middleware=[Middleware(BaseHTTPMiddleware, dispatch=mcp_middleware)],
                 )
 
+                # Simplified - auth not used in this deployment
                 self.http_app = self._create_custom_http_app(
                     http_path,
-                    mcp_server._auth_server_provider,
-                    mcp_server.settings.auth,
-                    mcp_server.settings.debug,
-                    mcp_server._additional_http_routes,
+                    None,  # auth_server_provider
+                    None,  # auth_settings
+                    False, # debug
+                    [],    # routes
                 )
 
         def _create_custom_http_app(self, streamable_http_path, auth_server_provider, auth_settings, debug, routes):
@@ -345,7 +339,7 @@ else:
             self.http_session_task_group = None
 
             self.http_session_manager = StreamableHTTPSessionManager(
-                app=mcp_server._mcp_server,
+                app=mcp_server,
                 event_store=None,
                 json_response=True,
                 stateless=False,
