@@ -86,7 +86,8 @@ RUN pip install --no-cache-dir \
 # Stage 10: MCP and A2A support
 RUN pip install --no-cache-dir \
     fastmcp \
-    starlette
+    starlette \
+    a2wsgi
 
 # Copy application code
 COPY . /a0/
