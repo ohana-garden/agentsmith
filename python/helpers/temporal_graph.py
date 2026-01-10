@@ -126,7 +126,7 @@ class TemporalGraph:
             timestamp: $timestamp,
             metadata: $metadata
         })
-        RETURN elementId(e) as id
+        RETURN id(e) as id
         """
         result = self.query(cypher, props)
         return result[0]["id"] if result else None
@@ -141,7 +141,7 @@ class TemporalGraph:
         fact_id = hashlib.md5(f"{subject}:{predicate}:{obj}".encode()).hexdigest()[:12]
         
         cypher = """
-        MATCH (ep:Episode) WHERE elementId(ep) = $episode_id
+        MATCH (ep:Episode) WHERE id(ep) = $episode_id
         MERGE (f:Fact {fact_id: $fact_id})
         SET f.subject = $subject,
             f.predicate = $predicate,
@@ -151,7 +151,7 @@ class TemporalGraph:
             f.valid_to = null,
             f.invalid_at = null
         MERGE (ep)-[:EXTRACTED {timestamp: $ts}]->(f)
-        RETURN elementId(f) as id
+        RETURN id(f) as id
         """
         result = self.query(cypher, {
             "episode_id": episode_id,
@@ -205,7 +205,7 @@ class TemporalGraph:
           AND f1.object <> f2.object
           AND f1.invalid_at IS NULL
           AND f2.invalid_at IS NULL
-          AND elementId(f1) < elementId(f2)
+          AND id(f1) < id(f2)
         RETURN f1.subject as subject, f1.predicate as predicate,
                f1.object as value1, f2.object as value2,
                f1.valid_from as time1, f2.valid_from as time2
@@ -250,7 +250,7 @@ class TemporalGraph:
             p.capabilities = $capabilities,
             p.created_at = $ts,
             p.decision_count = 0
-        RETURN elementId(p) as id
+        RETURN id(p) as id
         """
         result = self.query(cypher, {
             "name": name,
@@ -290,7 +290,7 @@ class TemporalGraph:
         })
         CREATE (p)-[:DECIDED {timestamp: $ts}]->(d)
         SET p.decision_count = coalesce(p.decision_count, 0) + 1
-        RETURN elementId(d) as id
+        RETURN id(d) as id
         """
         result = self.query(cypher, {
             "persona_name": persona_name,
@@ -330,7 +330,7 @@ class TemporalGraph:
             updated_at: $ts,
             status: 'draft'
         })
-        RETURN elementId(b) as id
+        RETURN id(b) as id
         """
         result = self.query(cypher, {
             "name": name,
@@ -364,7 +364,7 @@ class TemporalGraph:
             changed_by: $changed_by
         })
         CREATE (new)-[:EVOLVED_FROM {timestamp: $ts}]->(old)
-        RETURN elementId(new) as id
+        RETURN id(new) as id
         """
         result = self.query(cypher, {
             "name": name,
