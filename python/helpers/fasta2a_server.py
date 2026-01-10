@@ -7,7 +7,10 @@ import contextlib
 import threading
 
 from python.helpers import settings
-from starlette.requests import Request
+try:
+    from starlette.requests import Request
+except ImportError:
+    Request = None  # type: ignore
 
 # Local imports
 from python.helpers.print_style import PrintStyle
@@ -152,7 +155,8 @@ class AgentZeroWorker(Worker):  # type: ignore[misc]
         """Convert A2A message to Agent Zero UserMessage."""
         # Extract text from message parts
         text_parts = [part.get('text', '') for part in a2a_message.get('parts', []) if part.get('kind') == 'text']
-        message_text = '\n'.join(text_parts)
+        message_text = '
+'.join(text_parts)
 
         # Extract file attachments
         attachments = []
@@ -339,7 +343,9 @@ class DynamicA2AProxy:
         """ASGI application interface with token-based routing."""
         if not FASTA2A_AVAILABLE:
             # FastA2A not available, return 503
-            response = b'HTTP/1.1 503 Service Unavailable\r\n\r\nFastA2A not available'
+            response = b'HTTP/1.1 503 Service Unavailable
+
+FastA2A not available'
             await send({
                 'type': 'http.response.start',
                 'status': 503,
@@ -354,7 +360,9 @@ class DynamicA2AProxy:
         from python.helpers import settings
         cfg = settings.get_settings()
         if not cfg["a2a_server_enabled"]:
-            response = b'HTTP/1.1 403 Forbidden\r\n\r\nA2A server is disabled'
+            response = b'HTTP/1.1 403 Forbidden
+
+A2A server is disabled'
             await send({
                 'type': 'http.response.start',
                 'status': 403,
@@ -386,7 +394,9 @@ class DynamicA2AProxy:
 
         if self.app is None:
             # FastA2A not configured, return 503
-            response = b'HTTP/1.1 503 Service Unavailable\r\n\r\nFastA2A not configured'
+            response = b'HTTP/1.1 503 Service Unavailable
+
+FastA2A not configured'
             await send({
                 'type': 'http.response.start',
                 'status': 503,
