@@ -15,79 +15,83 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Set working directory
 WORKDIR /a0
 
-# Install Python dependencies in stages to avoid conflicts
-# Stage 1: Core scientific stack with pinned compatible versions
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir \
+# Upgrade pip
+RUN pip install --no-cache-dir --upgrade pip
+
+# Stage 1: Core ML stack - let pip resolve compatible versions
+RUN pip install --no-cache-dir \
     numpy \
     scipy \
     scikit-learn
 
-# Stage 2: PyTorch CPU-only
+# Stage 2: PyTorch CPU-only (latest compatible)
 RUN pip install --no-cache-dir \
-    torch==2.1.0 --index-url https://download.pytorch.org/whl/cpu
+    torch --index-url https://download.pytorch.org/whl/cpu
 
-# Stage 3: ML/NLP packages
+# Stage 3: ML/NLP - modern compatible versions
 RUN pip install --no-cache-dir \
-    transformers==4.36.0 \
-    accelerate==0.25.0 \
-    sentence-transformers==2.2.2 \
-    tokenizers==0.15.0 \
-    tiktoken==0.5.2
+    transformers \
+    accelerate \
+    sentence-transformers \
+    tokenizers \
+    tiktoken
 
 # Stage 4: LLM providers
 RUN pip install --no-cache-dir \
-    openai==1.12.0 \
-    litellm==1.30.0 \
-    anthropic==0.18.0
+    openai \
+    litellm \
+    anthropic
 
 # Stage 5: Web framework and utilities
 RUN pip install --no-cache-dir \
-    flask[async]==3.0.3 \
-    flask-basicauth==0.2.0 \
-    python-dotenv==1.0.1 \
-    pydantic==2.6.0 \
-    nest-asyncio==1.6.0 \
-    aiohttp==3.9.3 \
-    requests==2.31.0
+    flask[async] \
+    flask-basicauth \
+    python-dotenv \
+    pydantic \
+    nest-asyncio \
+    aiohttp \
+    requests
 
 # Stage 6: Document processing
 RUN pip install --no-cache-dir \
-    pypdf==4.0.1 \
-    pymupdf==1.23.8 \
-    beautifulsoup4==4.12.3 \
-    html2text==2024.2.26 \
-    markdown==3.5.2 \
-    markdownify==0.11.6
+    pypdf \
+    pymupdf \
+    beautifulsoup4 \
+    html2text \
+    markdown \
+    markdownify
 
 # Stage 7: Database and graph
 RUN pip install --no-cache-dir \
-    redis==5.0.1 \
-    falkordb==1.0.4 \
-    faiss-cpu==1.7.4
+    redis \
+    falkordb \
+    faiss-cpu
 
-# Stage 8: Agent Zero specific
+# Stage 8: Langchain ecosystem
 RUN pip install --no-cache-dir \
     langchain \
     langchain-core \
     langchain-community \
     langchain-text-splitters \
-    langchain-unstructured \
-    docker==7.0.0 \
-    paramiko==3.4.0 \
-    duckduckgo-search==4.4.3 \
-    psutil==5.9.8 \
-    toml==0.10.2 \
-    tomli==2.0.1
+    langchain-unstructured
 
-# Stage 9: Additional utilities
+# Stage 9: Agent tools
 RUN pip install --no-cache-dir \
-    webcolors==1.13 \
-    crontab==1.0.1 \
-    pathspec==0.12.1 \
-    GitPython==3.1.41
+    docker \
+    paramiko \
+    duckduckgo-search \
+    psutil \
+    toml \
+    tomli
 
-# Stage 10: MCP and A2A support
+# Stage 10: Additional utilities
+RUN pip install --no-cache-dir \
+    webcolors \
+    crontab \
+    pathspec \
+    GitPython
+
+# Stage 11: MCP and A2A support
 RUN pip install --no-cache-dir \
     fastmcp \
     starlette \
@@ -96,7 +100,7 @@ RUN pip install --no-cache-dir \
     mcp \
     fasta2a
 
-# Stage 11: Remaining dependencies
+# Stage 12: Remaining dependencies
 RUN pip install --no-cache-dir \
     httpx \
     graphiti-core \
