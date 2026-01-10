@@ -1,8 +1,16 @@
 import base64
 import warnings
-import whisper
 import tempfile
 import asyncio
+
+# Make whisper import optional - it's a heavy dependency
+try:
+    import whisper
+    WHISPER_AVAILABLE = True
+except ImportError:
+    whisper = None
+    WHISPER_AVAILABLE = False
+
 from python.helpers import runtime, rfc, settings, files
 from python.helpers.print_style import PrintStyle
 from python.helpers.notification import NotificationManager, NotificationType, NotificationPriority
@@ -15,6 +23,9 @@ _model_name = ""
 is_updating_model = False  # Tracks whether the model is currently updating
 
 async def preload(model_name:str):
+    if not WHISPER_AVAILABLE:
+        PrintStyle.standard("Whisper not available - openai-whisper package not installed")
+        return
     try:
         # return await runtime.call_development_function(_preload, model_name)
         return await _preload(model_name)
@@ -24,6 +35,9 @@ async def preload(model_name:str):
         
 async def _preload(model_name:str):
     global _model, _model_name, is_updating_model
+
+    if not WHISPER_AVAILABLE:
+        return
 
     while is_updating_model:
         await asyncio.sleep(0.1)
@@ -70,6 +84,8 @@ def _is_downloaded():
     return _model is not None
 
 async def transcribe(model_name:str, audio_bytes_b64: str):
+    if not WHISPER_AVAILABLE:
+        raise RuntimeError("Whisper not available - openai-whisper package not installed")
     # return await runtime.call_development_function(_transcribe, model_name, audio_bytes_b64)
     return await _transcribe(model_name, audio_bytes_b64)
 
