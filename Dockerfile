@@ -22,13 +22,13 @@ RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir \
     torch --index-url https://download.pytorch.org/whl/cpu
 
-# Stage 2: ML/NLP - these will use torch's numpy
+# Stage 2: ML/NLP - pinned to Agent Zero versions
 RUN pip install --no-cache-dir \
     transformers \
     accelerate \
-    sentence-transformers \
+    sentence-transformers==3.0.1 \
     tokenizers \
-    tiktoken
+    tiktoken==0.8.0
 
 # Stage 3: Scientific stack AFTER torch - will get compatible versions
 RUN pip install --no-cache-dir \
@@ -66,13 +66,11 @@ RUN pip install --no-cache-dir \
     redis \
     falkordb
 
-# Stage 8: Langchain ecosystem
+# Stage 8: Langchain ecosystem (pinned to Agent Zero versions)
 RUN pip install --no-cache-dir \
-    langchain \
-    langchain-core \
-    langchain-community \
-    langchain-text-splitters \
-    langchain-unstructured
+    langchain-core==0.3.49 \
+    langchain-community==0.3.19 \
+    langchain-text-splitters
 
 # Stage 9: Agent tools
 RUN pip install --no-cache-dir \
@@ -93,11 +91,11 @@ RUN pip install --no-cache-dir \
 # Stage 11: MCP and A2A support (pinned versions for API compatibility)
 RUN pip install --no-cache-dir \
     fastmcp==2.3.4 \
+    mcp==1.13.1 \
+    fasta2a==0.5.0 \
+    a2wsgi==1.10.8 \
     starlette \
-    a2wsgi \
-    anyio \
-    mcp \
-    fasta2a
+    anyio
 
 # Stage 12: Remaining dependencies
 RUN pip install --no-cache-dir \
