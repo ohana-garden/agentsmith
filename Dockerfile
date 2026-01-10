@@ -19,9 +19,9 @@ WORKDIR /a0
 # Stage 1: Core scientific stack with pinned compatible versions
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir \
-    numpy==1.24.3 \
-    scipy==1.11.4 \
-    scikit-learn==1.3.2
+    numpy \
+    scipy \
+    scikit-learn
 
 # Stage 2: PyTorch CPU-only
 RUN pip install --no-cache-dir \
