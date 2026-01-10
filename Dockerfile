@@ -115,7 +115,8 @@ RUN pip install --no-cache-dir \
     pdf2image \
     pytesseract \
     pytz \
-    werkzeug
+    werkzeug \
+    yt-dlp
 
 # Copy application code
 COPY . /a0/
