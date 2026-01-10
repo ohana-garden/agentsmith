@@ -1,9 +1,5 @@
-@font-face {
-  font-family: 'Material Symbols Outlined';
-  font-style: normal;
-  font-weight: 400;
-  src: url(./google-icons.ttf) format('truetype');
-}
+/* Material Symbols Outlined - loaded from Google CDN */
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';
@@ -17,4 +13,9 @@
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
 }
