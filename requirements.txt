@@ -1,5 +1,6 @@
-# Railway cache bust 20260110073624
+# Railway cache bust 20260110074004
 fastmcp
+starlette
 # AgentSmith Requirements
 # Pinned versions for compatibility
 
