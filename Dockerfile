@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libffi-dev libssl-dev \
     poppler-utils tesseract-ocr \
+    libsndfile1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
