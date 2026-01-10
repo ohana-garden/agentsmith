@@ -4,7 +4,15 @@ import base64
 import io
 import warnings
 import asyncio
-import soundfile as sf
+
+# Make soundfile import optional
+try:
+    import soundfile as sf
+    SOUNDFILE_AVAILABLE = True
+except ImportError:
+    sf = None
+    SOUNDFILE_AVAILABLE = False
+
 from python.helpers import runtime
 from python.helpers.print_style import PrintStyle
 from python.helpers.notification import NotificationManager, NotificationType, NotificationPriority
@@ -19,6 +27,9 @@ is_updating_model = False
 
 
 async def preload():
+    if not SOUNDFILE_AVAILABLE:
+        PrintStyle.standard("Kokoro TTS not available - soundfile package not installed")
+        return
     try:
         # return await runtime.call_development_function(_preload)
         return await _preload()
@@ -32,6 +43,9 @@ async def preload():
 
 async def _preload():
     global _pipeline, is_updating_model
+
+    if not SOUNDFILE_AVAILABLE:
+        return
 
     while is_updating_model:
         await asyncio.sleep(0.1)
@@ -88,6 +102,8 @@ def _is_downloaded():
 
 async def synthesize_sentences(sentences: list[str]):
     """Generate audio for multiple sentences and return concatenated base64 audio"""
+    if not SOUNDFILE_AVAILABLE:
+        raise RuntimeError("Kokoro TTS not available - soundfile package not installed")
     try:
         # return await runtime.call_development_function(_synthesize_sentences, sentences)
         return await _synthesize_sentences(sentences)
