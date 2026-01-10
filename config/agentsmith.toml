@@ -1,0 +1,55 @@
+# AgentSmith Configuration
+# Environment variables override these settings
+
+[server]
+host = "0.0.0.0"
+port = 80
+
+[llm]
+# Default to OpenRouter - set API_KEY_OPENROUTER env var
+provider = "openrouter"
+model = "anthropic/claude-sonnet-4-20250514"
+temperature = 0.7
+max_tokens = 4096
+
+[llm.fallback]
+provider = "openrouter"
+model = "meta-llama/llama-3.3-70b-instruct"
+
+[embedding]
+provider = "openai"
+model = "text-embedding-3-small"
+
+[graph]
+# FalkorDB connection
+enabled = true
+host = "falkordb.railway.internal"
+port = 16379
+password = "CH@NG3M3N()W!"  # Default - change in production
+graph_name = "agentsmith"
+
+[graph.graphiti]
+# Graphiti temporal knowledge graph
+enabled = true
+entity_resolution = true
+temporal_tracking = true
+
+[mcp]
+enabled = true
+servers = []
+
+[memory]
+# Persistent memory settings
+enabled = true
+path = "/a0/memory"
+
+[knowledge]
+# Knowledge base settings  
+enabled = true
+path = "/a0/knowledge"
+
+[agent]
+# Agent behavior
+max_iterations = 50
+timeout = 300
+verbose = true
