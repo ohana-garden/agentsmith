@@ -109,7 +109,13 @@ RUN pip install --no-cache-dir \
     imapclient \
     kokoro \
     soundfile \
-    browser-use
+    browser-use \
+    flaredantic \
+    inputimeout \
+    pdf2image \
+    pytesseract \
+    pytz \
+    werkzeug
 
 # Copy application code
 COPY . /a0/
