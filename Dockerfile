@@ -87,7 +87,10 @@ RUN pip install --no-cache-dir \
 RUN pip install --no-cache-dir \
     fastmcp \
     starlette \
-    a2wsgi
+    a2wsgi \
+    anyio \
+    mcp \
+    fasta2a
 
 # Copy application code
 COPY . /a0/
