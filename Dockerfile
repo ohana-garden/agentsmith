@@ -104,7 +104,12 @@ RUN pip install --no-cache-dir \
     PyYAML \
     Pillow \
     cryptography \
-    attrs
+    attrs \
+    exchangelib \
+    imapclient \
+    kokoro \
+    soundfile \
+    browser-use
 
 # Copy application code
 COPY . /a0/
