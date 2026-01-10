@@ -95,6 +95,17 @@ RUN pip install --no-cache-dir \
     mcp \
     fasta2a
 
+# Stage 11: Remaining dependencies
+RUN pip install --no-cache-dir \
+    httpx \
+    graphiti-core \
+    simpleeval \
+    regex \
+    PyYAML \
+    Pillow \
+    cryptography \
+    attrs
+
 # Copy application code
 COPY . /a0/
 
