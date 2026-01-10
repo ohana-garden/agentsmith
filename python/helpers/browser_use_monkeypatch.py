@@ -1,5 +1,13 @@
 from typing import Any
-from browser_use.llm import ChatGoogle
+
+# Make browser_use import optional - it's a heavy dependency
+try:
+    from browser_use.llm import ChatGoogle
+    BROWSER_USE_AVAILABLE = True
+except ImportError:
+    ChatGoogle = None
+    BROWSER_USE_AVAILABLE = False
+
 from python.helpers import dirty_json
 
 
@@ -159,4 +167,5 @@ def _patched_fix_gemini_schema(self, schema: dict[str, Any]) -> dict[str, Any]:
 
 def apply():
     """Applies the monkey-patch to ChatGoogle."""
-    ChatGoogle._fix_gemini_schema = _patched_fix_gemini_schema
+    if BROWSER_USE_AVAILABLE and ChatGoogle is not None:
+        ChatGoogle._fix_gemini_schema = _patched_fix_gemini_schema
