@@ -139,4 +139,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:${PORT:-80}/ || exit 1
 
 # Run - startup check then Agent Zero
-CMD python startup_check.py && python run_ui.py --port ${PORT:-80} --host 0.0.0.0
+CMD python startup_check.py && python run_ui.py --port ${PORT:-80} --host 0.0.0.0 --dockerized true
