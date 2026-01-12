@@ -6,7 +6,6 @@ import re
 import subprocess
 from typing import Any, Literal, TypedDict, cast
 
-import models
 from python.helpers import runtime, whisper, defer, git
 from . import files, dotenv
 from python.helpers.print_style import PrintStyle
@@ -1302,6 +1301,7 @@ def convert_out(settings: Settings) -> SettingsOutput:
 
 
 def _get_api_key_field(settings: Settings, provider: str, title: str) -> SettingsField:
+    import models  # lazy import to avoid circular dependency
     key = settings["api_keys"].get(provider, models.get_api_key(provider))
     # For API keys, use simple asterisk placeholder for existing keys
     return {
