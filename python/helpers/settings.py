@@ -6,7 +6,7 @@ import re
 import subprocess
 from typing import Any, Literal, TypedDict, cast
 
-from python.helpers import runtime, whisper, defer, git
+from python.helpers import runtime, defer, git
 from . import files, dotenv
 from python.helpers.print_style import PrintStyle
 from python.helpers.providers import get_providers
@@ -1553,6 +1553,7 @@ def _apply_settings(previous: Settings | None):
 
         # reload whisper model if necessary
         if not previous or _settings["stt_model_size"] != previous["stt_model_size"]:
+            from python.helpers import whisper  # lazy import to avoid startup failure if openai-whisper not installed
             task = defer.DeferredTask().start_task(
                 whisper.preload, _settings["stt_model_size"]
             )  # TODO overkill, replace with background task
